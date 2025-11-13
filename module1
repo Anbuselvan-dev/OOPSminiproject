@@ -1,0 +1,50 @@
+package oops;
+
+/// MODULE 1 – UNIT 1
+//OOP: Classes, Objects, Constructors, Inheritance, Encapsulation, finalize()
+
+class User {
+ private String name;
+ private String email;
+
+ public User(String n, String e) {
+     this.name = n;
+     this.email = e;
+ }
+
+ public String getName() { return name; }
+}
+
+class Event {
+ private String title;
+ private String date;
+ private String venue;
+
+ public static int count = 0;
+
+ public Event(String t, String d, String v) {
+     this.title = t;
+     this.date = d;
+     this.venue = v;
+     count++;
+ }
+
+ public void showEvent() {
+     System.out.println("Event: " + title + " | " + date + " | " + venue);
+ }
+
+ @Override
+ protected void finalize() {
+     System.out.println("Event object destroyed.");
+ }
+}
+
+public class mod1 {
+ public static void main(String[] args) {
+     Event e = new Event("Music Show", "25-02-2025", "Chennai");
+     e.showEvent();
+
+     User u = new User("Raj", "raj@gmail.com");
+     System.out.println("User: " + u.getName());
+ }
+}

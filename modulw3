@@ -1,0 +1,46 @@
+package oops;
+
+//MODULE 3 – UNIT 3
+//Generics, Threads, ExecutorService
+
+import java.util.concurrent.*;
+
+class GenericList<T> {
+ private T data;
+
+ public void add(T data) { this.data = data; }
+ public T get() { return data; }
+}
+
+class NotificationThread extends Thread {
+ private String msg;
+
+ public NotificationThread(String m) { msg = m; }
+
+ public void run() {
+     System.out.println("Sending Notification: " + msg);
+ }
+}
+
+public class mod3 {
+ public static void main(String[] args) {
+     try {
+         GenericList<String> gl = new GenericList<>();
+         gl.add("Event Added Successfully!");
+         System.out.println("Generic Stored: " + gl.get());
+
+         // Using Thread
+         NotificationThread nt = new NotificationThread("Booking Confirmed!");
+         nt.start();
+
+         // Using ExecutorService
+         ExecutorService exec = Executors.newFixedThreadPool(2);
+         exec.submit(() -> System.out.println("Executor Task 1 running"));
+         exec.submit(() -> System.out.println("Executor Task 2 running"));
+         exec.shutdown();
+
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+ }
+}

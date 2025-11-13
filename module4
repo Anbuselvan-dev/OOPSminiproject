@@ -1,0 +1,69 @@
+package oops;
+
+
+
+import java.sql.*;
+import java.util.ArrayList;
+
+class DBConnection {
+ public static Connection getConnection() throws Exception {
+     return DriverManager.getConnection(
+             "jdbc:mysql://localhost:3306/eventsdb",
+             "root",
+             "Amudiesh22@."
+     );
+ }
+}
+
+class EventDAO {
+
+ public void insertEvent(String title, String date, String venue) throws Exception {
+     Connection con = DBConnection.getConnection();
+     PreparedStatement ps = con.prepareStatement(
+             "INSERT INTO events (title, date, venue) VALUES (?, ?, ?)"
+     );
+
+     ps.setString(1, title);
+     ps.setString(2, date);
+     ps.setString(3, venue);
+
+     ps.executeUpdate();
+     con.close();
+ }
+
+ public ArrayList<String> readEvents() throws Exception {
+     ArrayList<String> list = new ArrayList<>();
+     Connection con = DBConnection.getConnection();
+     Statement st = con.createStatement();
+     ResultSet rs = st.executeQuery("SELECT * FROM events");
+
+     while (rs.next()) {
+         list.add(rs.getInt(1) + " | " +
+                 rs.getString(2) + " | " +
+                 rs.getString(3) + " | " +
+                 rs.getString(4));
+     }
+     con.close();
+     return list;
+ }
+}
+
+public class mod4 {
+
+ public static void main(String[] args) {
+     try {
+         EventDAO dao = new EventDAO();
+
+         dao.insertEvent("Tech Expo", "12-03-2025", "Bangalore");
+
+         System.out.println("Inserted Successfully!");
+         System.out.println("\n--- EVENTS IN DB ---");
+
+         for (String s : dao.readEvents())
+             System.out.println(s);
+
+     } catch (Exception ex) {
+         ex.printStackTrace();
+     }
+ }
+}

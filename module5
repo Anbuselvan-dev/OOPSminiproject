@@ -1,0 +1,71 @@
+package oops;
+
+//MODULE 5 – UNIT 5
+//JavaFX GUI + JDBC Integration
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.util.ArrayList;
+
+public class mod5 extends Application {
+
+ EventDAO dao = new EventDAO(); // From Module 4
+
+ @Override
+ public void start(Stage stage) {
+
+     Label l1 = new Label("Event Title:");
+     TextField t1 = new TextField();
+
+     Label l2 = new Label("Event Date:");
+     TextField t2 = new TextField();
+
+     Label l3 = new Label("Venue:");
+     TextField t3 = new TextField();
+
+     Button addBtn = new Button("Add Event");
+     Button showBtn = new Button("Show Events");
+
+     TextArea output = new TextArea();
+     output.setEditable(false);
+
+     // Add event to DB
+     addBtn.setOnAction(e -> {
+         try {
+             dao.insertEvent(t1.getText(), t2.getText(), t3.getText());
+             output.setText("Event Added Successfully!");
+         } catch (Exception ex) {
+             output.setText("Error: " + ex.getMessage());
+         }
+     });
+
+     // Show all events
+     showBtn.setOnAction(e -> {
+         try {
+             ArrayList<String> list = dao.readEvents();
+             output.clear();
+             for (String s : list)
+                 output.appendText(s + "\n");
+         } catch (Exception ex) {
+             output.setText("Error: " + ex.getMessage());
+         }
+     });
+
+     VBox root = new VBox(10, l1, t1, l2, t2, l3, t3, addBtn, showBtn, output);
+     root.setPadding(new Insets(15));
+
+     Scene sc = new Scene(root, 400, 450);
+     stage.setScene(sc);
+     stage.setTitle("Event Management System – JavaFX");
+     stage.show();
+ }
+
+ public static void main(String[] args) {
+     launch();
+ }
+}
